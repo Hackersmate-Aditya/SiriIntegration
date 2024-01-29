@@ -12,8 +12,8 @@ app = Flask(__name__)
 load_dotenv()
 
 # Dummy user credentials (replace these with your actual authentication logic)
-valid_username = "admin"
-valid_password = "admin123"
+valid_username = "Admin"
+valid_password = "Shubh"
 
 openai.api_key = os.getenv("OPENAI_API_KEY")
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
