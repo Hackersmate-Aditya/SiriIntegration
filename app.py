@@ -31,9 +31,9 @@ def login():
             if username == valid_username and password == valid_password:
                 return jsonify({'status': 'success', 'message': 'Login successful'})
             else:
-                return jsonify({'status': '', 'message': 'Invalid username or password'})
+                return jsonify({'message': 'Invalid username or password'})
         else:
-            return jsonify({'status': '', 'message': 'Missing username or password'})
+            return jsonify({'message': 'Missing username or password'})
     except Exception as e:
         return jsonify({'status': '', 'message': str(e)}), 500
 
