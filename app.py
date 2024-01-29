@@ -35,7 +35,7 @@ def login():
         else:
             return jsonify({'message': 'Missing username or password'})
     except Exception as e:
-        return jsonify({'status': '', 'message': str(e)}), 500
+        return jsonify({'message': str(e)}), 500
 
 @app.route('/api/process_request', methods=['POST'])
 def ask_question():
@@ -47,8 +47,8 @@ def ask_question():
         a_thread = request.json.get('thread_id')
 
         # Check the validity of the username and password
-        if username != valid_username or password != valid_password:
-            return jsonify({'status': 'error', 'message': 'Invalid username or password'})
+        # if username != valid_username or password != valid_password:
+        #     return jsonify({'status': 'error', 'message': 'Invalid username or password'})
 
         # Rest of your code for processing the user's question
         if not a_thread:
@@ -83,6 +83,7 @@ def ask_question():
         latest_message = messages.data[0]
         text = latest_message.content[0].text.value
         text = text.replace('\n', ' ')
+        text = text.replace(text[text.find('['):text.rfind(']') + 1], '')
 
         return jsonify({'response': text, 'thread_id': thread.id})
 
