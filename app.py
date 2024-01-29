@@ -12,8 +12,9 @@ app = Flask(__name__)
 load_dotenv()
 
 # Dummy user credentials (replace these with your actual authentication logic)
-valid_username = "Admin"
+valid_username = "User"
 valid_password = "Shubh"
+
 
 openai.api_key = os.getenv("OPENAI_API_KEY")
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
@@ -25,11 +26,13 @@ thread = None
 def login():
     try:
         data = request.get_json()
-        username = data.get('username')
-        password = data.get('password')
+        # username = data.get('username')
+        # password = data.get('password')
+        username = data.get('username', '').lower()
+        password = data.get('password', '').lower()
 
         if username and password:
-            if username == valid_username and password == valid_password:
+            if username == valid_username.lower() and password == valid_password.lower():
                 return jsonify({'status': 'success', 'message': 'Login successful'})
             else:
                 return jsonify({'message': 'Invalid username or password'})
