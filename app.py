@@ -31,11 +31,11 @@ def login():
             if username == valid_username and password == valid_password:
                 return jsonify({'status': 'success', 'message': 'Login successful'})
             else:
-                return jsonify({'status': 'error', 'message': 'Invalid username or password'})
+                return jsonify({'status': '', 'message': 'Invalid username or password'})
         else:
-            return jsonify({'status': 'error', 'message': 'Missing username or password'})
+            return jsonify({'status': '', 'message': 'Missing username or password'})
     except Exception as e:
-        return jsonify({'status': 'error', 'message': str(e)}), 500
+        return jsonify({'status': '', 'message': str(e)}), 500
 
 @app.route('/api/process_request', methods=['POST'])
 def ask_question():
