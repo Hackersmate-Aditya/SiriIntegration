@@ -83,10 +83,10 @@ def ask_question():
         latest_message = messages.data[0]
         text = latest_message.content[0].text.value
         text = text.replace('\n', ' ')
-        result = re.sub(r'\【.*?\】', '', text)
+        text = re.sub(r'\【.*?\】', '', text)
         # text = text.replace(text[text.find('['):text.rfind(']') + 1], '')
 
-        return jsonify({'response': result, 'thread_id': thread.id})
+        return jsonify({'response': text, 'thread_id': thread.id})
 
     except Exception as e:
         return jsonify({'status': 'error', 'message': str(e)}), 500
