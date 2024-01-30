@@ -13,7 +13,7 @@ load_dotenv()
 
 # Dummy user credentials (replace these with your actual authentication logic)
 valid_username = "User"
-valid_password = "Shubh"
+valid_password = "Gateway@4"
 
 
 openai.api_key = os.getenv("OPENAI_API_KEY")
