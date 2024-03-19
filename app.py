@@ -27,7 +27,7 @@ valid_password = "Gateway"
 def send_email():
 
     sender = "ritik.jain@infobeans.com"
-    receivers = ["mail.ritikjain14@gmail.com"]
+    receivers = ["deepesh.bhatia@infobeans.com"]
     app_password = "mrocgksyvdbyeidp"
 
     msg = MIMEMultipart()
