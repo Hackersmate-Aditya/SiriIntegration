@@ -45,7 +45,7 @@ def send_email(recievers_mail):
     app_password = "mrocgksyvdbyeidp"
 
     msg = MIMEMultipart()
-    msg['Subject'] = "Speed Up Verification: Your OTP Shortcut Inside"
+    msg['Subject'] = "Speed Up Verification: Your word Shortcut Inside"
     msg['From'] = sender
     # msg['To'] = ','.join(receivers)  # should be a string
     msg['To'] = recievers_mail
@@ -64,7 +64,7 @@ def send_email(recievers_mail):
 
     body_html = """
         
-        <p>Please enter the OTP (One-Time Password) to verify your identity. Thank you!</p>
+        <p>Please enter the word below to verify your identity. Thank you!</p>
 
         <p>{}</p>
     """.format(word)
