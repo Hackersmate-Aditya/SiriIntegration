@@ -31,6 +31,13 @@ def load_valid_credentials():
 
 valid_credentials = load_valid_credentials()
 
+meaningful_words = [
+    "credential", "identity", "authentication", "integrity", "validation", 
+    "verification", "authorization", "confirmation", "accreditation", 
+    "authentication", "secure", "trust", "confidence", "reliability", 
+    "safety", "accuracy", "privacy", "protection", "assurance", "confidentiality"
+]
+
 def send_email(recievers_mail):
 
     sender = "ritik.jain@infobeans.com"
@@ -52,8 +59,7 @@ def send_email(recievers_mail):
 
     # otp_cache['email_otp'] = otp
         # Generate a random word composed of alphabetic characters
-    word_length = 6  # Set the length of the word as needed
-    word = ''.join(random.choices(string.ascii_uppercase, k=word_length))
+    word = random.choice(meaningful_words)
     otp_cache['email_otp'] = word
 
     body_html = """
