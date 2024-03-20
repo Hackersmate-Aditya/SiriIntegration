@@ -13,6 +13,7 @@ import random
 import math
 from cachetools import TTLCache
 import json
+import string
 
 otp_cache = TTLCache(maxsize=100, ttl=300)
 
@@ -23,6 +24,7 @@ client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 print(openai.api_key)
 assistant_id = "asst_JP3dOs2Oij1DpUNCdDO4eaHe"
 thread = None
+
 def load_valid_credentials():
     with open('valid_credentials.json', 'r') as file:
         return json.load(file)
@@ -40,22 +42,26 @@ def send_email(recievers_mail):
     msg['From'] = sender
     # msg['To'] = ','.join(receivers)  # should be a string
     msg['To'] = recievers_mail
-    digits = "0123456789"
-    OTP = ""
+    # digits = "0123456789"
+    # OTP = ""
 
-    for i in range(6):
-        OTP += digits[math.floor(random.random()*10)]
+    # for i in range(6):
+    #     OTP += digits[math.floor(random.random()*10)]
         
-    otp = OTP
+    # otp = OTP
 
-    otp_cache['email_otp'] = otp
+    # otp_cache['email_otp'] = otp
+        # Generate a random word composed of alphabetic characters
+    word_length = 6  # Set the length of the word as needed
+    word = ''.join(random.choices(string.ascii_uppercase, k=word_length))
+    otp_cache['email_otp'] = word
 
     body_html = """
         
         <p>Please enter the OTP (One-Time Password) to verify your identity. Thank you!</p>
 
         <p>{}</p>
-    """.format(otp)
+    """.format(word)
     body_html_content = MIMEText(body_html, 'html')
     msg.attach(body_html_content)
 
@@ -73,9 +79,10 @@ def send_email(recievers_mail):
 @app.route('/api/verify', methods=['POST'])
 def verify_otp():
     data = request.get_json()
-    user_input = data.get('user_input')
-    stored_otp = otp_cache.get('email_otp')
-    if stored_otp == user_input:        
+    user_input = data.get('user_input','').lower()
+    stored_otp = otp_cache.get('email_otp','').lower()
+    print(stored_otp)
+    if stored_otp.lower() == user_input.lower():        
         return jsonify({'status': 'success', 'message': 'Login successful'})
     else:
         return jsonify({'message': 'Invalid username or password'})
