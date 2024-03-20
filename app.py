@@ -12,6 +12,7 @@ from email import encoders
 import random
 import math
 from cachetools import TTLCache
+import json
 
 otp_cache = TTLCache(maxsize=100, ttl=300)
 
@@ -22,19 +23,23 @@ client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 print(openai.api_key)
 assistant_id = "asst_JP3dOs2Oij1DpUNCdDO4eaHe"
 thread = None
-valid_username = "User"
-valid_password = "Gateway"
-def send_email():
+def load_valid_credentials():
+    with open('valid_credentials.json', 'r') as file:
+        return json.load(file)
+
+valid_credentials = load_valid_credentials()
+
+def send_email(recievers_mail):
 
     sender = "ritik.jain@infobeans.com"
-    receivers = ["deepesh.bhatia@infobeans.com"]
+    # receivers = ["mail.ritikjain14@gmail.com"]
     app_password = "mrocgksyvdbyeidp"
 
     msg = MIMEMultipart()
     msg['Subject'] = "Speed Up Verification: Your OTP Shortcut Inside"
     msg['From'] = sender
-    msg['To'] = ','.join(receivers)  # should be a string
-
+    # msg['To'] = ','.join(receivers)  # should be a string
+    msg['To'] = recievers_mail
     digits = "0123456789"
     OTP = ""
 
@@ -43,10 +48,8 @@ def send_email():
         
     otp = OTP
 
-    # Store OTP in the cache
     otp_cache['email_otp'] = otp
 
-    # format body of the email (html or string)
     body_html = """
         
         <p>Please enter the OTP (One-Time Password) to verify your identity. Thank you!</p>
@@ -60,24 +63,21 @@ def send_email():
         server = smtplib.SMTP('smtp.gmail.com', 587)
         server.starttls()
         server.login(sender, app_password)
-        server.sendmail(sender, receivers, msg.as_string())
+        server.sendmail(sender, recievers_mail, msg.as_string())
         server.quit()
         print("Success")
 
     except smtplib.SMTPException:
         print("Error: unable to send email")
 
-# Function to verify OTP
 @app.route('/api/verify', methods=['POST'])
 def verify_otp():
     data = request.get_json()
     user_input = data.get('user_input')
     stored_otp = otp_cache.get('email_otp')
-    if stored_otp == user_input:
-        # print("OTP verified successfully!")
+    if stored_otp == user_input:        
         return jsonify({'status': 'success', 'message': 'Login successful'})
     else:
-        # print("Invalid OTP. Please try again.")
         return jsonify({'message': 'Invalid username or password'})
 
 @app.route('/api/login', methods=['POST'])
@@ -85,16 +85,15 @@ def login():
     try:
         data = request.get_json()
         username = data.get('username', '').lower()
-        password = data.get('password', '').lower()
+        password = data.get('password', '').lower()    
 
-        if username and password:
-            if username == valid_username.lower() and password == valid_password.lower():
-                send_email()
+        for credentials in valid_credentials:
+            if (username == credentials["username"].lower() and
+                    password == credentials["password"].lower()):
+                send_email(credentials["email"])
                 return jsonify({'status': 'success', 'message': 'Login successful'})
-            else:
-                return jsonify({'message': 'Invalid username or password'})
-        else:
-            return jsonify({'message': 'Missing username or password'})
+
+        return jsonify({'message': 'Invalid username or password'})
     except Exception as e:
         return jsonify({'message': str(e)}), 500
 
