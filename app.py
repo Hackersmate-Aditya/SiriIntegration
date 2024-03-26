@@ -32,10 +32,8 @@ def load_valid_credentials():
 valid_credentials = load_valid_credentials()
 
 meaningful_words = [
-    "credential", "identity", "authentication", "integrity", "validation", 
-    "verification", "authorization", "confirmation", "accreditation", 
-    "authentication", "secure", "trust", "confidence", "reliability", 
-    "safety", "accuracy", "privacy", "protection", "assurance", "confidentiality"
+    "secure", "trust", "confidence", "reliability", 
+    "safety", "accuracy", "privacy", "protection"
 ]
 
 def send_email(recievers_mail):
@@ -82,16 +80,16 @@ def send_email(recievers_mail):
     except smtplib.SMTPException:
         print("Error: unable to send email")
 
-@app.route('/api/verify', methods=['POST'])
-def verify_otp():
-    data = request.get_json()
-    user_input = data.get('user_input','').lower()
-    stored_otp = otp_cache.get('email_otp','').lower()
-    print(stored_otp)
-    if stored_otp.lower() == user_input.lower():        
-        return jsonify({'status': 'success', 'message': 'Login successful'})
-    else:
-        return jsonify({'message': 'Invalid username or password'})
+# @app.route('/api/verify', methods=['POST'])
+# def verify_otp():
+#     data = request.get_json()
+#     user_input = data.get('user_input','').lower()
+#     stored_otp = otp_cache.get('email_otp','').lower()
+#     print(stored_otp)
+#     if stored_otp.lower() == user_input.lower():        
+#         return jsonify({'status': 'success', 'message': 'Login successful'})
+#     else:
+#         return jsonify({'message': 'Invalid username or password'})
 
 @app.route('/api/login', methods=['POST'])
 def login():
@@ -103,7 +101,7 @@ def login():
         for credentials in valid_credentials:
             if (username == credentials["username"].lower() and
                     password == credentials["password"].lower()):
-                send_email(credentials["email"])
+                # send_email(credentials["email"])
                 return jsonify({'status': 'success', 'message': 'Login successful'})
 
         return jsonify({'message': 'Invalid username or password'})
