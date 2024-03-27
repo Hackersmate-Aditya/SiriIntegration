@@ -4,18 +4,18 @@ from openai import OpenAI
 import openai
 import os
 import re
-import smtplib
-from email.mime.multipart import MIMEMultipart
-from email.mime.text import MIMEText
-from email.mime.base import MIMEBase
-from email import encoders
+# import smtplib
+# from email.mime.multipart import MIMEMultipart
+# from email.mime.text import MIMEText
+# from email.mime.base import MIMEBase
+# from email import encoders
 import random
 import math
-from cachetools import TTLCache
+# from cachetools import TTLCache
 import json
 import string
 
-otp_cache = TTLCache(maxsize=100, ttl=300)
+# otp_cache = TTLCache(maxsize=100, ttl=300)
 
 app = Flask(__name__)
 
@@ -36,49 +36,49 @@ meaningful_words = [
     "safety", "accuracy", "privacy", "protection"
 ]
 
-def send_email(recievers_mail):
+# def send_email(recievers_mail):
 
-    sender = "ritik.jain@infobeans.com"
-    # receivers = ["mail.ritikjain14@gmail.com"]
-    app_password = "mrocgksyvdbyeidp"
+#     sender = "ritik.jain@infobeans.com"
+#     # receivers = ["mail.ritikjain14@gmail.com"]
+#     app_password = "mrocgksyvdbyeidp"
 
-    msg = MIMEMultipart()
-    msg['Subject'] = "Speed Up Verification: Your word Shortcut Inside"
-    msg['From'] = sender
-    # msg['To'] = ','.join(receivers)  # should be a string
-    msg['To'] = recievers_mail
-    # digits = "0123456789"
-    # OTP = ""
+#     msg = MIMEMultipart()
+#     msg['Subject'] = "Speed Up Verification: Your word Shortcut Inside"
+#     msg['From'] = sender
+#     # msg['To'] = ','.join(receivers)  # should be a string
+#     msg['To'] = recievers_mail
+#     # digits = "0123456789"
+#     # OTP = ""
 
-    # for i in range(6):
-    #     OTP += digits[math.floor(random.random()*10)]
+#     # for i in range(6):
+#     #     OTP += digits[math.floor(random.random()*10)]
         
-    # otp = OTP
+#     # otp = OTP
 
-    # otp_cache['email_otp'] = otp
-        # Generate a random word composed of alphabetic characters
-    word = random.choice(meaningful_words)
-    otp_cache['email_otp'] = word
+#     # otp_cache['email_otp'] = otp
+#         # Generate a random word composed of alphabetic characters
+#     word = random.choice(meaningful_words)
+#     otp_cache['email_otp'] = word
 
-    body_html = """
+#     body_html = """
         
-        <p>Please enter the word below to verify your identity. Thank you!</p>
+#         <p>Please enter the word below to verify your identity. Thank you!</p>
 
-        <p>{}</p>
-    """.format(word)
-    body_html_content = MIMEText(body_html, 'html')
-    msg.attach(body_html_content)
+#         <p>{}</p>
+#     """.format(word)
+#     body_html_content = MIMEText(body_html, 'html')
+#     msg.attach(body_html_content)
 
-    try:
-        server = smtplib.SMTP('smtp.gmail.com', 587)
-        server.starttls()
-        server.login(sender, app_password)
-        server.sendmail(sender, recievers_mail, msg.as_string())
-        server.quit()
-        print("Success")
+#     try:
+#         server = smtplib.SMTP('smtp.gmail.com', 587)
+#         server.starttls()
+#         server.login(sender, app_password)
+#         server.sendmail(sender, recievers_mail, msg.as_string())
+#         server.quit()
+#         print("Success")
 
-    except smtplib.SMTPException:
-        print("Error: unable to send email")
+#     except smtplib.SMTPException:
+#         print("Error: unable to send email")
 
 # @app.route('/api/verify', methods=['POST'])
 # def verify_otp():
